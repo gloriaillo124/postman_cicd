@@ -1,0 +1,54 @@
+{
+	"info": {
+		"_postman_id": "2d1f4a36-4d30-4706-8e2f-d3c9656aa809",
+		"name": "postman_cicd2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27850044",
+		"_collection_link": "https://www.postman.com/gold-moon-189436/workspace/projet-employees/collection/27850044-2d1f4a36-4d30-4706-8e2f-d3c9656aa809?action=share&source=collection_link&creator=27850044"
+	},
+	"item": [
+		{
+			"name": "get_home",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"verification contenu du message\", ()=> {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Hello World\")\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.95:8001/",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"95"
+					],
+					"port": "8001",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
