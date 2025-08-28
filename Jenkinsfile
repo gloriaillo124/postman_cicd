@@ -1,35 +1,28 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'postman/newman:latest' }
+    }
 
     stages {
-        stage('Run Newman Collections') {
-            agent {
-                docker { 
-                    image 'postman/newman:latest'
-                    args '--user $(id -u):$(id -g)'
-                }
-            }
+        stage('Install Newman') {
             steps {
-                echo 'Running Collection 1...'
-                sh '''
-                    docker run --rm -v $PWD/collections:/etc/newman:ro postman/newman:latest \
-                    run /etc/newman/collection1.json -r cli,junit \
-                    --reporter-junit-export /etc/newman/results1.xml
-                '''
+                sh 'npm install -g newman'
+            }
+        }
 
-                echo 'Running Collection 2...'
+        stage('Run Postman Collections') {
+            steps {
                 sh '''
-                    docker run --rm -v $PWD/collections:/etc/newman:ro postman/newman:latest \
-                    run /etc/newman/collection2.json -r cli,junit \
-                    --reporter-junit-export /etc/newman/results2.xml
+                    newman run collections/collection1.json -r cli,junit --reporter-junit-export results1.xml
+                    newman run collections/collection2.json -r cli,junit --reporter-junit-export results2.xml
                 '''
             }
         }
 
         stage('Publish JUnit Reports') {
             steps {
-                junit 'collections/results1.xml'
-                junit 'collections/results2.xml'
+                junit 'results1.xml'
+                junit 'results2.xml'
             }
         }
     }
